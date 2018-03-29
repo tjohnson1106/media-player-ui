@@ -10,6 +10,7 @@ import {
   StyleSheet,
   Animated
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -39,7 +40,7 @@ class MusicUI extends Component {
               left: 0,
               right: 0,
               zIndex: 10,
-              backgroundColor: "red",
+              backgroundColor: "white",
               height: SCREEN_HEIGHT
             }
           ]}
@@ -76,7 +77,23 @@ class MusicUI extends Component {
                   source={require("../assets/media_girl.jpeg")}
                 />
               </Animated.View>
+              <Animated.Text
+                style={{ opacity: 1, fontSize: 18, paddingLeft: 10 }}
+              >
+                UNTITLED(Live)
+              </Animated.Text>
             </View>
+            <Animated.View
+              style={{
+                opacity: 1,
+                flex: 1,
+                flexDirection: "row",
+                justifyContent: "space-around"
+              }}
+            >
+              <Ionicons name="md-pause" size={32} />
+              <Ionicons name="md-play" size={32} />
+            </Animated.View>
           </Animated.View>
         </Animated.View>
       </Animated.View>
