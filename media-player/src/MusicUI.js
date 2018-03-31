@@ -27,7 +27,23 @@ class MusicUI extends Component {
       onPanResponderMove: (evt, gestureState) => {
         this.animation.setValue({ x: 0, y: gestureState.dy });
       },
-      onPanResponderRelease: (evt, gestureState) => {}
+      onPanResponderRelease: (evt, gestureState) => {
+        if (gestureState.dy < 0)
+        {
+          Animated.spring(this.animation.y, {
+            toValue: -SCREEN_HEIGHT - 110,
+            tension: 1
+          }).start()
+         
+        }  
+        else if (gestureState.dy > 0)
+        {
+          Animated.spring(this.animation.y. {
+            toValue: SCREEN_HEIGHT - 90,
+            tension: 1
+          }).start()
+        }  
+      }
     });
   }
 
@@ -39,6 +55,18 @@ class MusicUI extends Component {
     animatedImageHeight = this.animation.y.interpolate({
       inputRange: [0, SCREEN_HEIGHT - 80],
       outputRange: [200, 32],
+      extrapolate: "clamp"
+    });
+
+    animatedSongTitleOpacity = this.animation.y.interpolate({
+      inputRange: [0, SCREEN_HEIGHT - 500, SCREEN_HEIGHT - 80],
+      outputRange: [0, 0, 1],
+      extrapolate: "clamp"
+    });
+
+    animatedImageMarginLeft = this.animation.y.interpolate({
+      inputRange: [0, SCREEN_HEIGHT - 80],
+      outputRange: [SCREEN_WIDTH / 2 - 100, 1],
       extrapolate: "clamp"
     });
 
@@ -81,9 +109,9 @@ class MusicUI extends Component {
             >
               <Animated.View
                 style={{
-                  height: 32,
-                  width: 32,
-                  marginLeft: 10
+                  height: animatedImageHeight,
+                  width: animatedImageHeight,
+                  marginLeft: animatedImageMarginLeft
                 }}
               >
                 <Image
@@ -96,7 +124,11 @@ class MusicUI extends Component {
                 />
               </Animated.View>
               <Animated.Text
-                style={{ opacity: 1, fontSize: 18, paddingLeft: 10 }}
+                style={{
+                  opacity: animatedSongTitleOpacity,
+                  fontSize: 18,
+                  paddingLeft: 10
+                }}
               >
                 UNTITLED(Live)
               </Animated.Text>
