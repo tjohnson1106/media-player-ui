@@ -17,7 +17,10 @@ const SCREEN_WIDTH = Dimensions.get("window").width;
 
 class MusicUI extends Component {
   componentWillMount() {
-    this.animation = new Animated.ValueXY({ x: 0, y: SCREEN_HEIGHT - 80 });
+    this.animation = new Animated.ValueXY({
+      x: 0,
+      y: SCREEN_HEIGHT - 90
+    });
 
     this.panResponder = PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
@@ -30,12 +33,12 @@ class MusicUI extends Component {
       onPanResponderRelease: (evt, gestureState) => {
         if (gestureState.dy < 0) {
           Animated.spring(this.animation.y, {
-            toValue: -SCREEN_HEIGHT + 110,
+            toValue: -SCREEN_HEIGHT + 120,
             tension: 1
           }).start();
         } else if (gestureState.dy > 0) {
           Animated.spring(this.animation.y, {
-            toValue: SCREEN_HEIGHT - 90,
+            toValue: SCREEN_HEIGHT - 120,
             tension: 1
           }).start();
         }
@@ -49,26 +52,32 @@ class MusicUI extends Component {
     };
 
     animatedImageHeight = this.animation.y.interpolate({
-      inputRange: [0, SCREEN_HEIGHT - 80],
+      inputRange: [0, SCREEN_HEIGHT - 90],
       outputRange: [200, 32],
       extrapolate: "clamp"
     });
 
     animatedSongTitleOpacity = this.animation.y.interpolate({
-      inputRange: [0, SCREEN_HEIGHT - 500, SCREEN_HEIGHT - 80],
+      inputRange: [0, SCREEN_HEIGHT - 500, SCREEN_HEIGHT - 90],
       outputRange: [0, 0, 1],
       extrapolate: "clamp"
     });
 
     animatedImageMarginLeft = this.animation.y.interpolate({
-      inputRange: [0, SCREEN_HEIGHT - 80],
+      inputRange: [0, SCREEN_HEIGHT - 90],
       outputRange: [SCREEN_WIDTH / 2 - 100, 1],
       extrapolate: "clamp"
     });
 
     animatedHeaderHeight = this.animation.y.interpolate({
-      inputRange: [0, SCREEN_HEIGHT - 80],
+      inputRange: [0, SCREEN_HEIGHT - 90],
       outputRange: [SCREEN_WIDTH / 2, 90],
+      extrapolate: "clamp"
+    });
+
+    animatedSongDetailsOpacity = this.animation.y.interpolate({
+      inputRange: [0, SCREEN_HEIGHT - 500, SCREEN_HEIGHT - 90],
+      outputRange: [1, 0, 0],
       extrapolate: "clamp"
     });
 
@@ -80,6 +89,7 @@ class MusicUI extends Component {
         }}
       >
         <Animated.View
+          {...this.panResponder.panHandlers}
           style={[
             animatedHeight,
             {
@@ -93,7 +103,6 @@ class MusicUI extends Component {
           ]}
         >
           <Animated.View
-            {...this.panResponder.panHandlers}
             style={{
               height: animatedHeaderHeight,
               borderTopWidth: 1,
@@ -137,7 +146,7 @@ class MusicUI extends Component {
             </View>
             <Animated.View
               style={{
-                opacity: 1,
+                opacity: animatedSongTitleOpacity,
                 flex: 1,
                 flexDirection: "row",
                 justifyContent: "space-around"
@@ -146,6 +155,26 @@ class MusicUI extends Component {
               <Ionicons name="md-pause" size={32} />
               <Ionicons name="md-play" size={32} />
             </Animated.View>
+          </Animated.View>
+
+          <Animated.View
+            style={{
+              height: animatedHeaderHeight,
+              opacity: animatedSongDetailsOpacity
+            }}
+          >
+            <View
+              style={{
+                flex: 2,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-around"
+              }}
+            >
+              <Ionicons name="md-rewind" size={40} />
+              <Ionicons name="md-pause" size={50} />
+              <Ionicons name="md-fastforward" size={40} />
+            </View>
           </Animated.View>
         </Animated.View>
       </Animated.View>
