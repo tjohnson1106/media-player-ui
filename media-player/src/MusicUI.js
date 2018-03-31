@@ -46,7 +46,17 @@ class MusicUI extends Component {
         this.animation.setValue({ x: 0, y: gestureState.dy });
       },
       onPanResponderRelease: (evt, gestureState) => {
-        if (gestureState.dy < 0) {
+        if (gestureState.moveY > SCREEN_HEIGHT - 120) {
+          Animated.spring(this.animation.y, {
+            toValue: 0,
+            tension: 1
+          }).start();
+        } else if (gestureState.moveY < 120) {
+          Animated.spring(this.animation.y, {
+            toValue: 0,
+            tension: 1
+          }).start();
+        } else if (gestureState.dy < 0) {
           this.setState({ isScrollEnabled: true });
           Animated.spring(this.animation.y, {
             toValue: -SCREEN_HEIGHT + 120,
@@ -98,11 +108,17 @@ class MusicUI extends Component {
       extrapolate: "clamp"
     });
 
+    animatedBackgroundColor = this.animation.y.interpolate({
+      inputRange: [0, SCREEN_HEIGHT - 90],
+      outputRange: ["rgba(0,0,0,0.5)", "white"],
+      extrapolate: "clamp"
+    });
+
     return (
       <Animated.View
         style={{
           flex: 1,
-          backgroundColor: "white"
+          backgroundColor: animatedBackgroundColor
         }}
       >
         <Animated.View
