@@ -29,7 +29,11 @@ class MusicUI extends Component {
     });
 
     this.panResponder = PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (evt, gestureState) => {
+        if (this.state.isScrollEnabled && this.scrollOffset < 0 && gestureState.dy > 0) {
+          return true;
+        }
+      },
       onPanResponderGrant: (evt, gestureState) => {
         this.animation.extractOffset();
       },
