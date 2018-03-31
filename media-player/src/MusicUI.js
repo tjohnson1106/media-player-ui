@@ -18,12 +18,29 @@ const SCREEN_WIDTH = Dimensions.get("window").width;
 class MusicUI extends Component {
   componentWillMount() {
     this.animation = new Animated.ValueXY({ x: 0, y: SCREEN_HEIGHT - 80 });
+
+    this.panResponder = PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: (evt, gestureState) => {
+        this.animation.extractOffset();
+      },
+      onPanResponderMove: (evt, gestureState) => {
+        this.animation.setValue({ x: 0, y: gestureState.dy });
+      },
+      onPanResponderRelease: (evt, gestureState) => {}
+    });
   }
 
   render() {
     const animatedHeight = {
       transform: this.animation.getTranslateTransform()
     };
+
+    animatedImageHeight = this.animation.y.interpolate({
+      inputRange: [0, SCREEN_HEIGHT - 80],
+      outputRange: [200, 32],
+      extrapolate: "clamp"
+    });
 
     return (
       <Animated.View
@@ -46,6 +63,7 @@ class MusicUI extends Component {
           ]}
         >
           <Animated.View
+            {...this.panResponder.panHandlers}
             style={{
               height: 80,
               borderTopWidth: 1,
