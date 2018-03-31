@@ -28,21 +28,17 @@ class MusicUI extends Component {
         this.animation.setValue({ x: 0, y: gestureState.dy });
       },
       onPanResponderRelease: (evt, gestureState) => {
-        if (gestureState.dy < 0)
-        {
+        if (gestureState.dy < 0) {
           Animated.spring(this.animation.y, {
-            toValue: -SCREEN_HEIGHT - 110,
+            toValue: -SCREEN_HEIGHT + 110,
             tension: 1
-          }).start()
-         
-        }  
-        else if (gestureState.dy > 0)
-        {
-          Animated.spring(this.animation.y. {
+          }).start();
+        } else if (gestureState.dy > 0) {
+          Animated.spring(this.animation.y, {
             toValue: SCREEN_HEIGHT - 90,
             tension: 1
-          }).start()
-        }  
+          }).start();
+        }
       }
     });
   }
@@ -70,6 +66,12 @@ class MusicUI extends Component {
       extrapolate: "clamp"
     });
 
+    animatedHeaderHeight = this.animation.y.interpolate({
+      inputRange: [0, SCREEN_HEIGHT - 80],
+      outputRange: [SCREEN_WIDTH / 2, 90],
+      extrapolate: "clamp"
+    });
+
     return (
       <Animated.View
         style={{
@@ -93,7 +95,7 @@ class MusicUI extends Component {
           <Animated.View
             {...this.panResponder.panHandlers}
             style={{
-              height: 80,
+              height: animatedHeaderHeight,
               borderTopWidth: 1,
               borderTopColor: "#ebe5e5",
               flexDirection: "row",
