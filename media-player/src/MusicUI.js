@@ -30,8 +30,13 @@ class MusicUI extends Component {
 
     this.panResponder = PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gestureState) => {
-        if (this.state.isScrollEnabled && this.scrollOffset < 0 && gestureState.dy > 0) {
+        if (
+          (this.state.isScrollEnabled && this.scrollOffset < 0 && gestureState.dy > 0) ||
+          (!this.state.isScrollEnabled && gestureState.dy < 0)
+        ) {
           return true;
+        } else {
+          return false;
         }
       },
       onPanResponderGrant: (evt, gestureState) => {
@@ -42,11 +47,13 @@ class MusicUI extends Component {
       },
       onPanResponderRelease: (evt, gestureState) => {
         if (gestureState.dy < 0) {
+          this.setState({ isScrollEnabled: true });
           Animated.spring(this.animation.y, {
             toValue: -SCREEN_HEIGHT + 120,
             tension: 1
           }).start();
         } else if (gestureState.dy > 0) {
+          this.setState({ isScrollEnabled: false });
           Animated.spring(this.animation.y, {
             toValue: SCREEN_HEIGHT - 120,
             tension: 1
@@ -245,6 +252,11 @@ class MusicUI extends Component {
                 <Ionicons name="md-more" size={32} style={{ color: "#fa95ed" }} />
               </View>
             </Animated.View>
+            <View
+              style={{
+                height: 1000
+              }}
+            />
           </ScrollView>
         </Animated.View>
       </Animated.View>
